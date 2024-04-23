@@ -9,6 +9,11 @@
         "48": "icons/icon-48.png",
         "128": "icons/icon-128.png"
     },
+    "permissions": [
+        "tabs",
+        "storage",
+        "activeTab"
+    ],
     "action": {
         "default_icon": {
             "16": "icons/icon-16.png",
@@ -23,7 +28,22 @@
         {
             "js": [
                 "libs/jquery-3.7.1.min.js",
+                "features/example.com.js",
                 "content.js"
+            ],
+            "matches": [
+                "<all_urls>"
+            ]
+        }
+    ],
+    "background": {
+        "service_worker": "background.js",
+        "type": "module"
+    },
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "features/*.js"
             ],
             "matches": [
                 "<all_urls>"
