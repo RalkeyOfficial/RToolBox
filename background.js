@@ -62,8 +62,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             const url = new URL(tabs[0].url);
             const hostname = url.hostname;
 
-            console.log(featureRegistry);
-
             // Load feature states before sending them to the popup
             loadFeatureStates().then(() => {
                 const featuresForSite = featureRegistry[hostname] || [];
