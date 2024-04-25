@@ -159,18 +159,6 @@ async function startPostDownload(post) {
 	downloadMedia(mediaUrl, fileName);
 }
 
-async function downloadMedia(mediaUrl, filename) {
-	const response = await fetch(mediaUrl);
-	const arrayBuffer = await response.arrayBuffer();
-	const blob = new Blob([arrayBuffer], { type: response.headers.get("Content-Type") });
-	const urlCreator = window.URL || window.webkitURL;
-	const downloadUrl = urlCreator.createObjectURL(blob);
-	const a = document.createElement("a");
-	a.href = downloadUrl;
-	a.download = filename;
-	a.click();
-}
-
 function getPostData(post) {
 	const postUrl =
 		document.URL.match(/(\/p\/)[A-Za-z0-9_-]+(\/)(?=.*|$)/g)?.[0] ??
@@ -232,6 +220,18 @@ async function getPostMedia(postUrl, isCarousel) {
 		.catch((error) => console.error("Error:", error));
 }
 
+async function downloadMedia(mediaUrl, filename) {
+	const response = await fetch(mediaUrl);
+	const arrayBuffer = await response.arrayBuffer();
+	const blob = new Blob([arrayBuffer], { type: response.headers.get("Content-Type") });
+	const urlCreator = window.URL || window.webkitURL;
+	const downloadUrl = urlCreator.createObjectURL(blob);
+	const a = document.createElement("a");
+	a.href = downloadUrl;
+	a.download = filename;
+	a.click();
+}
+
 function waitForXPathElem(selector) {
 	return new Promise((resolve) => {
 		if (getElemByXPath(selector)) {
@@ -259,27 +259,6 @@ function getElemByXPath(selector) {
 
 function checkIfXPathExists(selector) {
 	return getElemByXPath(selector) ? true : false;
-}
-
-function waitForElem(selector) {
-	return new Promise((resolve) => {
-		if (document.querySelector(selector)) {
-			return resolve(document.querySelector(selector));
-		}
-
-		const observer = new MutationObserver(() => {
-			if (document.querySelector(selector)) {
-				observer.disconnect();
-				resolve(document.querySelector(selector));
-			}
-		});
-
-		// If you get "parameter 1 is not of type 'Node'" error, see https://stackoverflow.com/a/77855838/492336
-		observer.observe(document.body, {
-			childList: true,
-			subtree: true,
-		});
-	});
 }
 
 function debounce(fn, delay) {
