@@ -29,12 +29,27 @@
         {
             "js": [
                 "libs/jquery-3.7.1.min.js",
-                "features/example.com.js",
-                "features/instagram.com.js",
                 "content.js"
             ],
             "matches": [
                 "<all_urls>"
+            ]
+        },
+        {
+            "js": [
+                "features/example.com.js"
+            ],
+            "matches": [
+                "https://*.example.com/",
+                "https://example.com/"
+            ]
+        },
+        {
+            "js": [
+                "features/instagram.com/download_button.js"
+            ],
+            "matches": [
+                "https://*.instagram.com/"
             ]
         }
     ],
