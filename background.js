@@ -1,4 +1,16 @@
 // background.js
+
+/*
+Registry object structure:
+{
+    "hostname": {
+        name: string,
+        enable: string,
+        disable: string,
+        enabled: string,
+    }[]
+}
+*/
 const featureRegistry = {};
 
 function registerFeatures(website, features) {
@@ -10,33 +22,44 @@ function registerFeatures(website, features) {
     if (featureRegistry[website][0] !== undefined) return;
 
     features.forEach((feature) => {
-        // check if feature is already registered
         featureRegistry[website].push({
             name: feature.name,
             enable: feature.enable,
             disable: feature.disable,
-            enabled: false, // Default state
+            enabled: false,
         });
     });
 }
 
-// Function to load feature states from storage (i honestly have no idea what this does specifically)
+function getFeaturesByHostname(hostname) {
+    return featureRegistry[hostname] || [];
+}
+
+// Function to load feature states from storage
 function loadFeatureStates() {
     return new Promise((resolve) => {
-        chrome.storage.sync.get(
-            Object.keys(featureRegistry),
-            (storedValues) => {
+        chrome.storage.sync
+            .get(Object.keys(featureRegistry)) // get all boolean values for the feature states
+            .then((storedValues) => {
+                /*
+                storedValues = {
+                    example.com: [true, false]
+                }
+                */
                 for (const website in storedValues) {
+                    // website = example.com
+                    // get all boolean states for this website
                     const featureStates = storedValues[website];
+
                     if (featureRegistry[website]) {
+                        // loop through registry of features for this website and set the feature state
                         featureRegistry[website].forEach((feature, index) => {
                             feature.enabled = featureStates[index];
                         });
                     }
                 }
                 resolve();
-            }
-        );
+            });
     });
 }
 
@@ -47,6 +70,7 @@ function saveFeatureStates(website) {
             (feature) => feature.enabled
         );
         const storageObject = { [website]: stateArray };
+
         chrome.storage.sync.set(storageObject);
     }
 }
@@ -57,15 +81,14 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     }
 
     // send features back
-    if (message.request === "getFeatures") {
+    if (message.action === "getFeatures") {
         chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
             const url = new URL(tabs[0].url);
             const hostname = url.hostname;
 
             // Load feature states before sending them to the popup
             loadFeatureStates().then(() => {
-                const featuresForSite = featureRegistry[hostname] || [];
-                sendResponse({ features: featuresForSite });
+                sendResponse({ features: getFeaturesByHostname(hostname) });
             });
         });
         return true; // Response will be asynchronous
@@ -94,9 +117,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                         // Send a message to the active tab's content script
                         chrome.tabs.sendMessage(tabs[0].id, {
                             action: "toggleFeature",
-                            enable: feature.enable,
-                            disable: feature.disable,
-                            enabled: feature.enabled,
+                            ...feature,
                         });
                     }
                 );

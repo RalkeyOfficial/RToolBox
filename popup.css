@@ -43,3 +43,13 @@ header > .title {
 section {
     background-color: white;
 }
+
+#featureList > div {
+    padding: 0.5em 1em;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+#featureList > div > input {
+    margin-right: 0.5em;
+}

@@ -7,10 +7,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 });
 
 // start enabled features
-const hostname = new URL(window.location.href).hostname;
+const hostname = new URL(document.URL).hostname;
 
 chrome.runtime.sendMessage(
-    { request: "getFeatures", website: hostname }, // Include the hostname in the request
+    { action: "getFeatures" }, // Include the hostname in the request
     (response) => {
         const features = response.features || [];
 

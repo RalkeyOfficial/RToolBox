@@ -12,7 +12,8 @@
     "permissions": [
         "tabs",
         "storage",
-        "activeTab"
+        "activeTab",
+        "downloads"
     ],
     "action": {
         "default_icon": {
@@ -29,6 +30,7 @@
             "js": [
                 "libs/jquery-3.7.1.min.js",
                 "features/example.com.js",
+                "features/instagram.com.js",
                 "content.js"
             ],
             "matches": [
