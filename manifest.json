@@ -49,7 +49,7 @@
                 "features/instagram.com/download_button.js"
             ],
             "matches": [
-                "https://*.instagram.com/"
+                "https://www.instagram.com/"
             ]
         }
     ],
