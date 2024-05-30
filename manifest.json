@@ -49,7 +49,7 @@
                 "features/instagram.com/download_button.js"
             ],
             "matches": [
-                "https://www.instagram.com/"
+                "https://www.instagram.com/*"
             ]
         }
     ],
@@ -60,7 +60,8 @@
     "web_accessible_resources": [
         {
             "resources": [
-                "features/*.js"
+                "features/*.js",
+                "features/*/*.js"
             ],
             "matches": [
                 "<all_urls>"
