@@ -61,7 +61,7 @@ function applyDownloadToHomepage() {
 		elem.find("div > div.x1lliihq.x1n2onr6 > div > div > section.x6s0dn4.xrvj5dj.x1o61qjw.x12nagc.x1gslohp")
 			.css("grid-template-columns", "1fr 1fr auto")
 			.append(newDownloadButtonElement);
-	})
+	});
 }
 
 function applyDownloadToPost() {
@@ -92,7 +92,7 @@ async function Instagram_EnableDownloadButton() {
 	repeater = setInterval(() => {
 		ApplyDownloadToModal();
 		applyDownloadToHomepage();
-	}, 200)
+	}, 200);
 }
 
 function Instagram_DisableDownloadButton() {
@@ -117,7 +117,7 @@ chrome.runtime.sendMessage({
 // |            useful functions               |
 // +===========================================+
 async function startPostDownload(post) {
-	console.log("[DOWNLOADER] :: Starting download process")
+	console.log("[DOWNLOADER] :: Starting download process");
 
 	// get data related to the post
 	const { postId, postIndex, postUrl, isCarousel } = getPostData(post);
@@ -144,9 +144,9 @@ async function startPostDownload(post) {
 
 	// get file extension and create a file name
 	const extension = mediaUrl
-		.split('?')[0] 					// split on ? and get the first result. this removes any query params from the string.
+		.split("?")[0] // split on ? and get the first result. this removes any query params from the string.
 		.match(/(\.[a-zA-Z0-9]*)$/g)[0] // get the extension from the url by finding a match with this regex .[a-zA-Z0-9]*  -  and it MUST be the ending part of the url
-		.split('.')[1] 					// remove the .
+		.split(".")[1]; // remove the .
 
 	const fileName = `${postId}_${postIndex}.${extension}`;
 
@@ -155,11 +155,11 @@ async function startPostDownload(post) {
 }
 
 function getPostData(post) {
-	console.log("[DOWNLOADER] :: Getting post data")
+	console.log("[DOWNLOADER] :: Getting post data");
 
 	const postUrl =
 		document.URL.match(/(\/p\/)[A-Za-z0-9_-]+(\/)(?=.*|$)/g)?.[0] ?? // use current URL if it has a post ID in it
-		post                                                             // otherwise search for the post ID within the post HTML
+		post // otherwise search for the post ID within the post HTML
 			.find("a[href]")
 			.filter((_, elem) =>
 				$(elem)
@@ -194,7 +194,7 @@ function getPostData(post) {
 }
 
 async function getPostMedia(postUrl, isCarousel) {
-	console.log("[DOWNLOADER] :: Getting post media url(s)")
+	console.log("[DOWNLOADER] :: Getting post media url(s)");
 
 	return await fetch(postUrl + "?__a=1&__d=dis")
 		.then((response) => response.json())
@@ -220,7 +220,7 @@ async function getPostMedia(postUrl, isCarousel) {
 }
 
 async function downloadMedia(mediaUrl, filename) {
-	console.log(`[DOWNLOADER] :: Starting download of media: ${filename}`)
+	console.log(`[DOWNLOADER] :: Starting download of media: ${filename}`);
 
 	const response = await fetch(mediaUrl);
 	const arrayBuffer = await response.arrayBuffer();
