@@ -183,7 +183,7 @@ function getPostData(post) {
 			.filter((index) => index !== -1)[0];
 	}
 
-	const postId = postUrl.match(/(?<=\/p\/)[A-Za-z0-9_]+(?=\/)/g)[0];
+	const postId = postUrl.match(/(?<=\/p\/)[A-Za-z0-9_-]+(?=\/)/g)[0];
 
 	return {
 		postUrl,
